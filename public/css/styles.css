@@ -1,11 +1,13 @@
-.header_nav {
-  display: flex;
-  list-style: none;
-  padding-left: 0;
+body {
+  padding-top: 73px;
 }
-.header_nav li {
-  margin-right: 30px;
+.header_nav li+li {
+  border-left: solid 1px #ccc;
 }
+.navbar-brand {
+  margin-left: 185px;
+}
+
 /* エラーメッセージ用のスタイル */
 .error {
   color: red;

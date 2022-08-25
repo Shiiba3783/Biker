@@ -1,4 +1,4 @@
-@extends('layouts.logged_in')
+@extends('layouts.default')
  
 @section('title', $title)
  

@@ -1,11 +1,13 @@
-@extends('layouts.logged_in')
+@extends('layouts.default')
  
 @section('title', $title)
  
 @section('content')
   <h1>{{ $title }}</h1>
   <a href = "{{ route('posts.create') }}">新規投稿</a>
-  <ul>
+  <!--メインコンテンツ-->
+  <div class = "index_main">
+      <ul>
         @forelse($posts as $post)
             <li>
                 <div>
@@ -42,31 +44,13 @@
                         </form>
                     @endif
                 </div>
-                <ul>
-                    @forelse($post->comments as $comment)
-                        <li>
-                            {{ $comment->user->name }}:{{ $comment->body }}
-                        </li>
-                    @empty
-                        <li>コメントはありません。</li>
-                    @endforelse
-                </ul>
-                <div>
-                    <form method = "post" action = "{{ route('comments.store') }}">
-                        @csrf
-                        <input type = "hidden" name = "post_id" value = "{{ $post->id }}">
-                        <label>
-                            コメントを追加
-                            <input type = "text" name = "body">
-                        </label>
-                        <input type = "submit" value = "送信">
-                    </form> 
-                </div>
             </li>
         @empty
-            <li>書き込みはありません。</li>
+            <li>投稿はありません。</li>
         @endforelse
-  </ul>
+    </ul>
+  </div>
+  
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

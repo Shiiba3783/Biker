@@ -1,4 +1,4 @@
-@extends('layouts.logged_in')
+@extends('layouts.default')
 
 @section('content')
     <h1>{{ $title }}</h1>
