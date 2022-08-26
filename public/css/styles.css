@@ -7,6 +7,19 @@ body {
 .navbar-brand {
   margin-left: 185px;
 }
+.index_main ul {
+  padding: 0;
+}
+.index_main li {
+  padding: 0;
+  margin-left: 18px;
+  list-style: none;
+}
+
+
+
+
+
 
 /* エラーメッセージ用のスタイル */
 .error {
