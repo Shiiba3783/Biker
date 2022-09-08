@@ -80,8 +80,7 @@ class PostController extends Controller
         
         preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー一-龠]+)/u', $request->tags, $match);
         
-        dd($match);
-        
+
         foreach($match[1] as $record) {
             $tag = Tag::firstOrCreate(['name' => $record]);
             $tag = null;
