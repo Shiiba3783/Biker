@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['user_id', 'comment', 'image'];
+    protected $fillable = ['user_id', 'comment', 'image0', 'image1', 'image2', 'image3'];
+    
+    protected $dates = ['created_at', 'updated_at'];
     
     public function user() {
         return $this->belongsTo('App\User');
@@ -27,5 +29,9 @@ class Post extends Model
         $liked_users_ids = $this->likedUsers->pluck('id');
         $result = $liked_users_ids->contains($user->id);
         return $result;
+    }
+    
+    public function tags() {
+        return $this->belongsToMany('App\Tag');
     }
 }

@@ -11,6 +11,9 @@
                             <a href = "{{ route('users.show',\Auth::user()) }}" class = "nav-link">{{ \Auth::user()->name }}</a>
                         </li>
                         <li class = "nav-item px-3">
+                             <a href = "{{ route('posts.create') }}" class = "nav-link">新規投稿</a>
+                        </li>
+                        <li class = "nav-item px-3">
                             <form action="{{ route('logout') }}" method="POST" class = "nav-link">
                                 @csrf
                                 <input type="submit" value="ログアウト">

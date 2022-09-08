@@ -8,6 +8,8 @@ use App\Post;
 use App\Http\Requests\PostImageRequest;
 use App\User;
 use App\Like;
+use App\Comment;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -45,18 +47,71 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $path = '';
-        $image = $request->file('image');
-        if(isset($image) === true) {
-            $path = $image->store('photos', 'public');
-        } 
+        // $path0 = '';
+        // $image = $request->file('image0');
+        // if(isset($image) === true) {
+        //     $path0 = $image->store('photos', 'public');
+        // } 
+        // $path1 = '';
+        // $image = $request->file('image1');
+        // if(isset($image) === true) {
+        //     $path1 = $image->store('photos', 'public');
+        // }
+        // $path2 = '';
+        // $image = $request->file('image2');
+        // if(isset($image) === true) {
+        //     $path2 = $image->store('photos', 'public');
+        // }
+        // $path3 = '';
+        // $image = $request->file('image3');
+        // if(isset($image) === true) {
+        //     $path3 = $image->store('photos', 'public');
+        // } 
         
+        $path = [];
+        $files = ['image0', 'image1', 'image2', 'image3'];
+        foreach($files as $key => $file) {
+            $path[] = '';
+            $image = $request->file($file);
+            if(isset($image) === true) {
+                $path[$key] = $image->store('photos', 'public');
+            }
+        }
+        
+        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー一-龠]+)/u', $request->tags, $match);
+        
+        dd($match);
+        
+        foreach($match[1] as $record) {
+            $tag = Tag::firstOrCreate(['name' => $record]);
+            $tag = null;
+            
+            $tag_id = Tag::where('name', $record)->get(['id']);
+            $post = Post::find($post_id);
+            $post->tags()->attach($tag_id);
+        }
+    
         Post::create([
             'user_id' => \Auth::user()->id,
             'comment' => $request->comment,
-            'image' => $path,
+            'image0' => $path[0],
+            'image1' => $path[1],
+            'image2' => $path[2],
+            'image3' => $path[3],
             ]);
-            
+        // $post->tags()->attach($tags_id);
+        
+        // $tags = Tag::where('name','=',$request->tags);
+        // $tag_id = 0;
+        // if($tags->count() > 0) {
+        //     $tag_id = $tags->first()->id;
+        // }else{
+        //     $tmp = Tag::create(['name'=>$request->tags]);
+        //     $tag_id = $tmp->id;
+        // }
+        
+        
+           
         session()->flash('success', '投稿を追加しました');
         return redirect()->route('posts.index');
     }
@@ -69,8 +124,12 @@ class PostController extends Controller
      */
     public function show($id)
     {
+        $post = Post::find($id);
+        $images = Post::select(['image0', 'image1', 'image2', 'image3'])->where('id',$id)->first();
         return view('posts.show', [
           'title' => '投稿詳細',
+          'post' => $post,
+          'images' => $images,
         ]);
     }
 
@@ -114,8 +173,17 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         
-        if($post->image !== '') {
-            \Storage::disk('public')->delete($post->image);
+        if($post->image0 !== '') {
+            \Storage::disk('public')->delete($post->image0);
+        }
+         if($post->image1 !== '') {
+            \Storage::disk('public')->delete($post->image1);
+        }
+         if($post->image2 !== '') {
+            \Storage::disk('public')->delete($post->image2);
+        }
+         if($post->image3 !== '') {
+            \Storage::disk('public')->delete($post->image3);
         }
         $post->delete();
         session()->flash('success', '投稿を削除しました');
@@ -134,21 +202,51 @@ class PostController extends Controller
     public function updateImage($id, PostImageRequest $request)
     {
         //画像投稿処理
-        $path = '';
-        $image = $request->file('image');
+        $path0 = '';
+        $image = $request->file('image0');
         if(isset($image) === true) {
-            $path = $image->store('photos', 'public');
+            $path0 = $image->store('photos', 'public');
+        }
+        $path1 = '';
+        $image = $request->file('image1');
+        if(isset($image) === true) {
+            $path1 = $image->store('photos', 'public');
+        }
+        $path2 = '';
+        $image = $request->file('image2');
+        if(isset($image) === true) {
+            $path2 = $image->store('photos', 'public');
+        }
+        $path3 = '';
+        $image = $request->file('image3');
+        if(isset($image) === true) {
+            $path3 = $image->store('photos', 'public');
         }
         $post = Post::find($id);
         
         //変更前の画像削除処理
-        if($post->image !== '') {
+        if($post->image0 !== '') {
             // \Storage::disk('public')->delete(\Storage::url($post->image));
-            \Storage::disk('public')->delete($post->image);
+            \Storage::disk('public')->delete($post->image0);
+        }
+        if($post->image1 !== '') {
+            // \Storage::disk('public')->delete(\Storage::url($post->image));
+            \Storage::disk('public')->delete($post->image1);
+        }
+        if($post->image2 !== '') {
+            // \Storage::disk('public')->delete(\Storage::url($post->image));
+            \Storage::disk('public')->delete($post->image2);
+        } 
+        if($post->image3 !== '') {
+            // \Storage::disk('public')->delete(\Storage::url($post->image));
+            \Storage::disk('public')->delete($post->image3);
         }
         
         $post->update([
-            'image' => $path,
+            'image0' => $path0,
+            'image1' => $path1,
+            'image2' => $path2,
+            'image3' => $path3,
             ]);
             
         session()->flash('success', '画像を変更しました');

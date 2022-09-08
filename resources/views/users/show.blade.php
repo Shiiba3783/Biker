@@ -8,9 +8,9 @@
         <dt>プロフィール画像</dt>
         <dd>
             @if($user->image !== '')
-                <img src = "{{ asset('storage/' . $user->image) }}">
+                <img src = "{{ asset('storage/' . $user->image) }}" alt = "{{$user->name}}">
             @else
-                <img src = "{{ asset('images/no_image.png') }}">
+                <img src = "{{ asset('images/no_image_user.jpg') }}" alt = "no_image">
             @endif
         </dd>
         @if(Auth::id() === $user->id)
