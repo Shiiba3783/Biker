@@ -3,7 +3,6 @@
 @section('title', $title)
  
 @section('content')
-  <h1>{{ $title }}</h1>
   <form method = "POST" enctype="multipart/form-data" action = "{{route('posts.store') }}" >
       @csrf
       <div class="form-group">

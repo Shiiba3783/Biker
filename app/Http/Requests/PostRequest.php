@@ -24,7 +24,8 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment' => ['required', 'max:200'],
+            'tags' => 'max:100',
+            'comment' => ['required', 'max:255'],
             'image0' => [
                 'required',
                 'file',

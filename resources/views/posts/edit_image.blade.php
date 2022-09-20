@@ -1,25 +1,26 @@
 @extends('layouts.default')
 
 @section('content')
-    <h1>{{ $title }}</h1>
-    
+
     <h2>現在の画像</h2>
     
-    @if($post->image0 !== '')
-        <img src = "{{ \Storage::url($post->image0) }}">
-    @else
-        <img src = "{{ asset('images/no_image.png') }}">
-    @endif
-    
-    @if($post->image1 !== '')
-        <img src = "{{ \Storage::url($post->image1) }}">
-    @endif
-    @if($post->image2 !== '')
-        <img src = "{{ \Storage::url($post->image2) }}">
-    @endif
-    @if($post->image3 !== '')
-        <img src = "{{ \Storage::url($post->image3) }}">
-    @endif
+    @php
+        foreach([0,1,2,3] as $num){
+            eval('$flag=($post->image'.$num.'!=="");');
+            if($flag){
+                print '<div data-target = "#cl" data-slide-to=';
+                eval('print $num' . ';');
+                print '>';
+                print '<img src = " '.url('/').'/storage/';
+                eval('print $post->image'.$num.';');
+                print '"';
+                print 'alt = image';
+                eval('print $num' . ';');
+                print '>';
+                print '</div>';
+            }
+        }
+    @endphp
     
     <form method = "POST" action = "{{ route('posts.update_image', $post) }}" enctype = "multipart/form-data">
         @csrf

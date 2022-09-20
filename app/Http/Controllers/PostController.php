@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Post;
-use App\Http\Requests\PostImageRequest;
+use App\Http\Requests\PostEditImageRequest;
+use App\Http\Requests\PostEditRequest;
 use App\User;
 use App\Like;
 use App\Comment;
@@ -79,18 +80,8 @@ class PostController extends Controller
         }
         
         preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー一-龠]+)/u', $request->tags, $match);
-        
-
-        foreach($match[1] as $record) {
-            $tag = Tag::firstOrCreate(['name' => $record]);
-            $tag = null;
-            
-            $tag_id = Tag::where('name', $record)->get(['id']);
-            $post = Post::find($post_id);
-            $post->tags()->attach($tag_id);
-        }
     
-        Post::create([
+        $post = Post::create([
             'user_id' => \Auth::user()->id,
             'comment' => $request->comment,
             'image0' => $path[0],
@@ -98,6 +89,16 @@ class PostController extends Controller
             'image2' => $path[2],
             'image3' => $path[3],
             ]);
+            
+        $post_id = $post->id;
+        foreach($match[0] as $record) {
+            $tag = Tag::firstOrCreate(['name' => $record]);
+            $tag = null;
+            $tag_id = Tag::where('name', $record)->get(['id']);
+            $post = Post::find($post_id);
+            $post->tags()->attach($tag_id);
+        }
+        
         // $post->tags()->attach($tags_id);
         
         // $tags = Tag::where('name','=',$request->tags);
@@ -154,10 +155,20 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, $id)
+    public function update(PostEditRequest $request, $id)
     {
         $post = Post::find($id);
         $post->update($request->only(['comment']));
+        preg_match_all('/#([a-zA-Z0-9０-９ぁ-んァ-ヶー一-龠]+)/u', $request->tags, $match);
+        $post_id = $post->id;
+        $post->tags()->detach();
+        foreach($match[0] as $record) {
+            $tag = Tag::firstOrCreate(['name' => $record]);
+            $tag_id = Tag::where('name', $record)->get(['id']);
+            $post = Post::find($post_id);
+            $post->tags()->attach($tag_id);
+            }
+            dd($post->tags()->pluck('name'));
         session()->flash('success', '投稿を編集しました');
         return redirect()->route('posts.index');
     }
@@ -184,6 +195,7 @@ class PostController extends Controller
          if($post->image3 !== '') {
             \Storage::disk('public')->delete($post->image3);
         }
+        $post->tags()->detach();
         $post->delete();
         session()->flash('success', '投稿を削除しました');
         return redirect()->route('posts.index');
@@ -198,7 +210,7 @@ class PostController extends Controller
             ]);
     }
     
-    public function updateImage($id, PostImageRequest $request)
+    public function updateImage($id, PostEditImageRequest $request)
     {
         //画像投稿処理
         $path0 = '';

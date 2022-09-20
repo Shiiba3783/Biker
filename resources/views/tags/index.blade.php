@@ -1,10 +1,10 @@
 @extends('layouts.default')
  
-@section('title', $title)
+@section('title', $tag->name)
  
 @section('content')
+  <h2>{{ $tag->name }}</h2>
   <div class = "row">
-      <!--メインコンテンツ-->
       <div class = "index_main col-9 container">
           <ul class = "row">
             @forelse($posts as $post)
@@ -19,28 +19,7 @@
                             @endif
                             </a>
                         </div>
-                        {{--
-                        <div>
-                            @if(\Auth::user()->id === $post->user->id)
-                                <a href = "{{ route('posts.edit_image', $post) }}">画像を変更</a>
-                            @endif
-                        </div>
-                        --}}
                         <div class = "border-top bg-white user_container p-2 row mx-auto">
-                            {{--
-                            <a href = "{{ route('users.show', $post->user) }}">{{ $post->user->name }}</a>:
-                            {{ $post->comment }} 
-                            <div>
-                                ({{ $post->created_at->format('Y/m/d H:i') }})
-                                <span>
-                                    <a class="like_button">{{ $post->isLikedBy(Auth::user()) ? '★' : '☆' }}</a>
-                                    <form method="post" class="like" action="{{ route('posts.toggle_like', $post) }}">
-                                      @csrf
-                                      @method('patch')
-                                    </form>
-                                </span>
-                            </div>
-                            --}}
                             <div>
                                <a href = "{{route('users.show', $post->user) }}">
                                         @if($post->user->image !== '')
@@ -57,18 +36,6 @@
                                 <p>{{$post->created_at->format('Y/m/d')}}</p>
                             </div>
                           </div>
-                        {{--
-                        <div>
-                            @if(\Auth::user()->id === $post->user->id)
-                                [<a href = " {{ route('posts.edit', $post) }}">編集</a>]
-                                <form method = "post" class = "delete" action = "{{ route('posts.destroy', $post) }}">
-                                    @csrf
-                                    @method('delete')
-                                    <input type = "submit" value = "削除">
-                                </form>
-                            @endif
-                        </div>
-                        --}}
                     </div>
                 </li>
                 @empty

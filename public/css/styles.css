@@ -44,6 +44,9 @@ body {
   text-decoration: none;
   color: black;
 }
+.show-header {
+  margin-top: 73px;
+}
 .show-header img {
   width: 48px;
   height: 48px;
@@ -174,7 +177,18 @@ body {
   margin: 0 auto;
   font-weight: bold;
 }
-
+.body_conteiner p {
+  word-break: break-all;
+}
+.body_conteiner a {
+  word-break: break-all;
+  font-size: 90%;
+  font-weight: normal;
+}
+.user_header img{
+  width:148px;
+  height: 148px;
+}
 
 
 /* エラーメッセージ用のスタイル */

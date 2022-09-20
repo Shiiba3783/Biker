@@ -3,12 +3,10 @@
 @section('title', $title)
 
 @section('content_header')
-    <div class = "container-fluid bg-white pb-3">
-        <div class = "container p-0 show-header">
-            <h1>{{ $title }}</h1>
+    <div class = "container-fluid bg-white pb-3 show-header fixed-top">
+        <div class = "container p-0 ">
             <div class = "row justify-content-between mx-5">
-               <div>
-                   <a href = "{{route('users.show', $post->user->id) }}">
+                   <a href = "{{route('users.show', $post->user) }}">
                        <div>
                             @if($post->user->image !== '')
                                 <img src = "{{asset('storage/' .$post->user->image)}}" alt = "{{$post->user->name}}" class = "img-fluid rounded-circle">
@@ -20,15 +18,15 @@
                             </span>
                         </div>
                     </a>
-               </div>
                <div>
-                @if(Auth::user()->isFollowing($post->user))
+                @if($post->user->id !== Auth::user()->id)
+                    @if(Auth::user()->isFollowing($post->user))
                         <form method = "post" action = "{{ route('follows.destroy', $post->user) }}">
                             @csrf
                             @method('delete')
                             <button type = "submit" class = "btn btn-info">フォロー解除</button>
                         </form>
-                        
+                            
                     @else
                         <form method = "post" action = "{{ route('follows.store') }}">
                             @csrf
@@ -36,6 +34,17 @@
                             <button type = "submit" class = "btn btn-info">フォローする</button>
                         </form>
                     @endif
+                    
+                @else
+                        <a href = "{{ route('posts.edit_image', $post) }}" class = "btn btn-outline-secondary mr-3">画像を変更</a>
+                        <a href = "{{ route('posts.edit', $post) }}" class="btn btn-outline-warning mr-3">コメントを変更</a>
+                        <form method="post" class="delete" action="{{ route('posts.destroy', $post) }}">
+                          @csrf
+                          @method('delete')
+                          <button class = "btn btn-outline-danger" type="submit">投稿を削除</button>
+                        </form>
+
+                @endif
                 </div>
             </div>
         </div>
@@ -43,7 +52,7 @@
 @endsection
  
 @section('content')
-    <div class = "row mt-5">
+    <div class = "row mt-5" style = "padding-top:64px">
         <div class = "col-8">
            <div class = "carousel slide  carousel-container" id = "cl" data-ride = "carousel" data-interval="false">
                 @if($post->image1 !== '' && $post->image1 !== null)
@@ -185,7 +194,7 @@
                                         <img src = "{{ asset('images/no_image_user.jpg') }}" alt = "{{ \Auth::user()->name }}" class = "img-fluid rounded-circle">
                                     @endif
                                 </span>
-                                <input type = "text" name = "body" placeholder = "コメントを書く">
+                                <input type = "text" name = "body" size = "40" placeholder = "コメントを書く">
                             </label>
                             <input type = "submit" value = "送信">
                         </form> 
@@ -193,10 +202,12 @@
                 </div>
             </div>
         </div>
-        <div class = "col-4">
+        <div class = "col-4 body_conteiner">
             <div class = "border bg-white container">
                 <p class = "p-3">{{ $post->comment }}</p>
-                <p class = "p-1">ユーザー名： {{$post->user->name }}</p>
+                @foreach($post->tags as $tag)
+                    <a href = "{{route('tags.index', $tag)}}" class=" mb-1">{{$tag->name}}</a>
+                @endforeach
                 <p class = "border-top text-center text-secondary">{{$post->created_at}}</p>
             </div>
         </div>

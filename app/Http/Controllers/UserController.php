@@ -11,12 +11,14 @@ use App\Follow;
 
 class UserController extends Controller
 {
-    public function show($id)
+    public function show($name)
     {
-        $user = User::find($id);
+        $user = User::where('name', $name)->first();
+        $posts = $user->posts()->latest()->get();
         return view('users.show', [
             'title' => 'プロフィール',
             'user' => $user,
+            'posts' => $posts,
             ]);
     }
     
@@ -68,9 +70,9 @@ class UserController extends Controller
         return redirect()->route('users.show', $user);
     }
     
-    public function userFollows($id) 
+    public function userFollows($name) 
     {
-        $user = User::find($id);
+        $user = User::where('name', $name)->first();
         $follow_users = $user->follow_users;
         return view('users.user_follows', [
             'title' => $user->name . 'のフォロー一覧',
@@ -78,9 +80,9 @@ class UserController extends Controller
             ]);
     }
     
-    public function userFollowers($id) 
+    public function userFollowers($name) 
     {
-        $user = User::find($id);
+        $user = User::where('name', $name)->first();
         $followers = $user->followers;
         return view('users.user_followers', [
             'title' => $user->name . 'のフォロワー一覧',
