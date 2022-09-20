@@ -65,5 +65,10 @@ class User extends Authenticatable
         $result = $this->follow_users->pluck('id')->contains($user->id);
         return $result;
     }
+    
+    public function getRouteKeyName() {
+        return 'name';
+    }
+    
 
 }

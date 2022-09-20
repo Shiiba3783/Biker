@@ -2,6 +2,7 @@
  
 @section('header')
 <header>
+  @include('layouts.header')
     <ul class="header_nav">
         <li>
           <a href="{{ route('posts.index') }}">

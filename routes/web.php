@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +13,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/posts');
 });
 
 Route::resource('posts', 'PostController');
@@ -52,5 +53,7 @@ Route::patch('/posts/{post}/toggle_like', 'PostController@toggleLike')->name('po
 Route::get('/users/{user}/user_follows', 'UserController@userFollows')->name('users.user_follows');
 
 Route::get('/users/{user}/user_followers', 'UserController@userFollowers')->name('users.user_followers');
+
+Route::get('/tags/{tag}', 'TagController@index')->name('tags.index');
 
     
