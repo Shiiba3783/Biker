@@ -56,7 +56,8 @@ body {
   color: #000;
 }
 .carousel-container{
-  aspect-ratio: 556 / 742;
+  width: auto;
+  height: 742px;
 }
 .carousel-indicators{
   margin: 40px 0 0;
@@ -189,7 +190,9 @@ body {
   width:148px;
   height: 148px;
 }
-
+.tag_ranking p{
+  word-break: break-all;
+}
 
 /* エラーメッセージ用のスタイル */
 .error {

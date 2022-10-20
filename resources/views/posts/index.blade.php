@@ -4,8 +4,25 @@
  
 @section('content')
   <div class = "row">
+      <section class = "col-3 container bg-white mt-3 main_nav_container">
+        <form class="form-inline ml-auto tag_search mt-2" action = "@if(isset($search)) {{route('tags.index', $result)}} @endif">
+            @csrf
+            @method('get')
+            <h4>タグ検索</h4>
+            <input type="search" class="form-control form-control-sm mr-2" placeholder="キーワード" name = "search" value = "{{$search}}" >
+            <button type="submit" class="btn btn-warning btn-sm">検索</button>
+        </form>
+        <div class = "tag_ranking mt-3">
+            <h4>人気のタグ</h4>
+            @foreach($tags as $tag)
+            <a href = "{{route('tags.index', $tag->id)}}">
+                <p>{{$tag->name}}</p>
+            </a>
+            @endforeach
+        </div>
+      </section>
       <!--メインコンテンツ-->
-      <div class = "index_main col-9 container">
+      <section class = "index_main col-9 container">
           <ul class = "row">
             @forelse($posts as $post)
                 <li class = "col-4 mt-3">
@@ -75,7 +92,7 @@
                     <li>投稿はありません。</li>
                 @endforelse
             </ul>
-          </div>
+        </section>
   </div>
   
   
