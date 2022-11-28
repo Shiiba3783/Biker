@@ -4,7 +4,6 @@
  
 @section('content')
   <div class = "row">
-  <div class = "row">
       <section class = "col-3 container bg-white mt-3 main_nav_container">
         <div class = "tag_ranking mt-3">
             <h4>人気のタグ</h4>
