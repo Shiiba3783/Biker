@@ -11,6 +11,7 @@ use App\User;
 use App\Like;
 use App\Comment;
 use App\Tag;
+use App\post_tag;
 
 class PostController extends Controller
 {
@@ -19,12 +20,22 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $posts = Post::latest()->get();
+        $search = $request->input('search');
+        $query = Post::query();
+        $result = Post::whereHas('tags', function ($query) use ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        })->get();
+        $tags = Tag::withCount('posts')->orderBy('posts_count', 'desc')->limit(10)->get();
+        
         return view('posts.index', [
             'title' => '投稿一覧',
             'posts' => $posts,
+            'result' => $result,
+            'search' => $search,
+            'tags' => $tags,
             ]);
     }
 

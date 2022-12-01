@@ -8,9 +8,10 @@
         <div class = "tag_ranking mt-3">
             <h4>人気のタグ</h4>
             @foreach($tags as $tag)
-            <a href = "{{route('tags.index', $tag->id)}}">
-                <p>{{$tag->name}}</p>
-            </a>
+                <a href = "{{route('tags.index', $tag->id)}}">
+                    <p>{{$tag->name}}</p>
+                </a>
+            
             @endforeach
         </div>
       </section>
@@ -81,9 +82,9 @@
                         --}}
                     </div>
                 </li>
-                @empty
-                    <li>投稿はありません。</li>
-                @endforelse
+            @empty
+                <li class = "mx-auto mt-5">投稿はありません。</li>
+            @endforelse
             </ul>
           </div>
   </div>
